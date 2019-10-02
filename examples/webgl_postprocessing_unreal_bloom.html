@@ -58,8 +58,8 @@
 
 			scene = new THREE.Scene();
 
-			camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 100 );
-			camera.position.set( - 5, 2.5, - 3.5 );
+			camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 500 );
+			camera.position.set( - 5, 2.5, - 83.5 );
 			scene.add( camera );
 
 			controls = new OrbitControls( camera, renderer.domElement );
@@ -83,7 +83,9 @@
 			composer.addPass( renderScene );
 			composer.addPass( bloomPass );
 
-			new GLTFLoader().load( 'models/gltf/PrimaryIonDrive.glb', function ( gltf ) {
+			// try other model bloom
+			// new GLTFLoader().load( 'models/gltf/PrimaryIonDrive.glb', function ( gltf ) {
+			new GLTFLoader().load( 'models/gltf/tree/tree.glb', function ( gltf ) {
 
 				var model = gltf.scene;
 
@@ -91,12 +93,12 @@
 
 				// Mesh contains self-intersecting semi-transparent faces, which display
 				// z-fighting unless depthWrite is disabled.
-				var core = model.getObjectByName( 'geo1_HoloFillDark_0' );
-				core.material.depthWrite = false;
+				// var core = model.getObjectByName( 'geo1_HoloFillDark_0' );
+				// core.material.depthWrite = false;
 
-				mixer = new THREE.AnimationMixer( model );
-				var clip = gltf.animations[ 0 ];
-				mixer.clipAction( clip.optimize() ).play();
+				// mixer = new THREE.AnimationMixer( model );
+				// var clip = gltf.animations[ 0 ];
+				// mixer.clipAction( clip.optimize() ).play();
 
 				animate();
 
@@ -148,7 +150,7 @@
 
 				const delta = clock.getDelta();
 
-				mixer.update( delta );
+				// mixer.update( delta );
 
 				stats.update();
 

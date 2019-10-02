@@ -33,7 +33,7 @@
 
 			var renderer, camera, scene, stats, clock, mixer;
 
-			var numLights = 40;
+			var numLights = 80;
 			var lights = [];
 			var transparentObjects = [];
 
@@ -113,8 +113,10 @@
 				var distance = 20;
 
 				var c = new THREE.Vector3();
-				var geometry = new THREE.SphereBufferGeometry( 1, 1, 1 );
+				// var geometry = new THREE.SphereBufferGeometry( 1, 1, 1 );
+				var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
 
+				// light bloom by the reflect of the wall
 				for ( var i = 0; i < numLights; i ++ ) {
 
 					var light = new THREE.PointLight( 0xffffff, 2.0, distance );
