@@ -91,6 +91,11 @@
 
 				scene.add( model );
 
+				let meshBox = createBox("b1", 2, 0.6, 1.5, new THREE.Vector3(0, -1.3, 0), null, createMaterial(null));
+				// meshBox1 = createBox("b2", 50, 20, 40, new THREE.Vector3(0, -20, 0), null, createMaterial(null));
+				scene.add(meshBox);
+				// scene.add(meshBox1);
+
 				// Mesh contains self-intersecting semi-transparent faces, which display
 				// z-fighting unless depthWrite is disabled.
 				// var core = model.getObjectByName( 'geo1_HoloFillDark_0' );
@@ -156,6 +161,32 @@
 
 				composer.render();
 
+			}
+
+			function createBox (strName, nSizeX, nSizeY, nSizeZ, pos, quat, material) {
+				var object = new THREE.Mesh(new THREE.BoxBufferGeometry(nSizeX, nSizeY, nSizeZ), material);
+				if (strName) {
+					object.name = strName;
+				}
+
+				if (pos) {
+					object.position.copy(pos);
+				}
+				if (quat) {
+					object.quaternion.copy(quat);
+				}
+
+				return object;
+			}
+
+			function createRandomColor () {
+
+				return Math.floor(Math.random() * (1 << 24));
+			}
+
+			function createMaterial(color) {
+				color = color || createRandomColor();
+				return new THREE.MeshPhongMaterial({color: color});
 			}
 
 		</script>
