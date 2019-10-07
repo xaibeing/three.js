@@ -11,19 +11,22 @@
 		<div id="container"></div>
 		<div id="info"><a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - shader material demo. featuring <a href="http://www.pouet.net/prod.php?which=52761" target="_blank" rel="noopener">Monjori by Mic</a></div>
 
+		<!--第4个shader，最右边-->
 		<script id="fragment_shader4" type="x-shader/x-fragment">
 
+			// 从js传参数进来，可以每个重画周期修改
 			uniform float time;
 
 			varying vec2 vUv;
 
 			void main( void ) {
 
+				// [0,1] -> [-1,1]
 				vec2 position = - 1.0 + 2.0 * vUv;
 
-				float red = abs( sin( position.x * position.y + time / 5.0 ) );
-				float green = abs( sin( position.x * position.y + time / 4.0 ) );
-				float blue = abs( sin( position.x * position.y + time / 3.0 ) );
+				float red = abs( cos( position.x * position.y + time / 20.0 ) );
+				float green = abs( tan( position.x / position.y + time / 13.0 ) );
+				float blue = abs( sin( position.x + position.y + time / 6.0 ) );
 				gl_FragColor = vec4( red, green, blue, 1.0 );
 
 			}
@@ -42,9 +45,9 @@
 
 				float color = 0.0;
 				color += sin( position.x * cos( time / 15.0 ) * 80.0 ) + cos( position.y * cos( time / 15.0 ) * 10.0 );
-				color += sin( position.y * sin( time / 10.0 ) * 40.0 ) + cos( position.x * sin( time / 25.0 ) * 40.0 );
-				color += sin( position.x * sin( time / 5.0 ) * 10.0 ) + sin( position.y * sin( time / 35.0 ) * 80.0 );
-				color *= sin( time / 10.0 ) * 0.5;
+				//color += sin( position.y * sin( time / 10.0 ) * 40.0 ) + cos( position.x * sin( time / 25.0 ) * 40.0 );
+				//color += sin( position.x * sin( time / 5.0 ) * 10.0 ) + sin( position.y * sin( time / 35.0 ) * 80.0 );
+				//color *= sin( time / 10.0 ) * 0.5;
 
 				gl_FragColor = vec4( vec3( color, color * 0.5, sin( color + time / 3.0 ) * 0.75 ), 1.0 );
 
@@ -52,6 +55,7 @@
 
 		</script>
 
+		<!--第2个shader，对加载的texture（一个image），动态调整其uv，使得产生相应的“变形”效果-->
 		<script id="fragment_shader2" type="x-shader/x-fragment">
 
 			uniform float time;
@@ -71,11 +75,17 @@
 				uv.x = cos( a ) / r;
 				uv.y = sin( a ) / r;
 				uv /= 10.0;
-				uv += time * 0.05;
+				uv += time * 0.01;
 
-				vec3 color = texture2D( colorTexture, uv ).rgb;
+				// vUv * 2.5 会放大uv范围，相当于缩小texture。
+				// + time * 0.04 将使uv产生偏移，即平移texture。
+				// 如果 Texture 设置为 RepeatWrapping，会产生重复平铺的效果。
+				vec3 color = texture2D( colorTexture, vUv * 2.5 + time * 0.04 ).rgb;
 
-				gl_FragColor = vec4( color * r * 1.5, 1.0 );
+				// 经过变换得到的uv，使texture产生变形效果。
+				//vec3 color = texture2D( colorTexture, uv ).rgb;
+
+				gl_FragColor = vec4( color *  1.5, 1.0 );
 
 			}
 		</script>
@@ -92,7 +102,7 @@
 				float a = time * 40.0;
 				float d, e, f, g = 1.0 / 40.0 ,h ,i ,r ,q;
 
-				e = 400.0 * ( p.x * 0.5 + 0.5 );
+				e = 100.0 * ( p.x * 0.5 + 0.5 );
 				f = 400.0 * ( p.y * 0.5 + 0.5 );
 				i = 200.0 + sin( e * g + a / 150.0 ) * 20.0;
 				d = 200.0 + cos( f * g / 2.0 ) * 18.0 + cos( e * g ) * 7.0;
@@ -165,9 +175,10 @@
 
 				uniforms2 = {
 					"time": { value: 1.0 },
-					"colorTexture": { value: new THREE.TextureLoader().load( 'textures/disturb.jpg' ) }
+					"colorTexture": { value: new THREE.TextureLoader().load( 'textures/uv_grid_opengl.jpg' ) }
 				};
 
+				// 如果 Texture 不设置为 RepeatWrapping，超出范围的uv会采用edge位置的像素
 				uniforms2[ "colorTexture" ].value.wrapS = uniforms2[ "colorTexture" ].value.wrapT = THREE.RepeatWrapping;
 
 				var params = [
@@ -232,14 +243,19 @@
 				var delta = clock.getDelta();
 
 				uniforms1[ "time" ].value += delta * 5;
-				uniforms2[ "time" ].value = clock.elapsedTime;
+
+				// elapsedTime 可以使shader连续变化
+				// uniforms2[ "time" ].value = clock.elapsedTime;
+
+				// random值可以使shader产生抖动效果
+				uniforms2[ "time" ].value = (Math.random() - 0.5) / 3;
 
 				for ( var i = 0; i < scene.children.length; i ++ ) {
 
 					var object = scene.children[ i ];
 
-					object.rotation.y += delta * 0.5 * ( i % 2 ? 1 : - 1 );
-					object.rotation.x += delta * 0.5 * ( i % 2 ? - 1 : 1 );
+					object.rotation.y += delta * 0.1 * ( i % 2 ? 1 : - 1 );
+					object.rotation.x += delta * 0.0* ( i % 2 ? - 1 : 1 );
 
 				}
 
