@@ -240,7 +240,11 @@
 
 						var blendSrc = src[ j ];
 
-						var material = new THREE.MeshBasicMaterial( { map: currentMaps[ currentIndex ] } );
+						// material的默认blend设置可以比较“正常”的叠加前景和背景（blendSrc=SrcAlphaFactor，blendDst=OneMinusSrcAlphaFactor），
+						// 即类似抠图，叠加结果 = src * alpha + dst * (1 - alpha)
+						// 前景和背景，指前面的对象和它后面的对象。
+						// 如果material同时设置颜色和texture，它们也会叠加，但不是遵照这里的blending参数。
+						var material = new THREE.MeshBasicMaterial( { map: currentMaps[ currentIndex ], /*color: 0x0000ff*/ } );
 						material.transparent = true;
 
 						material.blending = THREE.CustomBlending;
