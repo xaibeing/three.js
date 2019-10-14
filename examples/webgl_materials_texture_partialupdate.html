@@ -41,9 +41,9 @@
 				var mesh = new THREE.Mesh( geometry, material );
 				scene.add( mesh );
 
-				//
+				// 创建一个数据块，可以拷贝到texture的指定位置来更新texture
 
-				var width = 32;
+				var width = 64;
 				var height = 32;
 
 				var data = new Uint8Array( width * height * 3 );
