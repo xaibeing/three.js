@@ -47,6 +47,7 @@ var files = {
 		"webgl_geometry_text_shapes",
 		"webgl_geometry_text_stroke",
 		"webgl_helpers",
+		"webgl_instancing_suzanne",
 		"webgl_interactive_buffergeometry",
 		"webgl_interactive_cubes",
 		"webgl_interactive_cubes_gpu",
@@ -60,6 +61,7 @@ var files = {
 		"webgl_layers",
 		"webgl_lensflares",
 		"webgl_lightprobe",
+		"webgl_lightprobe_cubecamera",
 		"webgl_lights_hemisphere",
 		"webgl_lights_physical",
 		"webgl_lights_pointlights",
@@ -77,7 +79,6 @@ var files = {
 		"webgl_loader_3mf_materials",
 		"webgl_loader_amf",
 		"webgl_loader_assimp",
-		"webgl_loader_assimp2json",
 		"webgl_loader_bvh",
 		"webgl_loader_collada",
 		"webgl_loader_collada_kinematics",
@@ -107,15 +108,6 @@ var files = {
 		"webgl_loader_pdb",
 		"webgl_loader_ply",
 		"webgl_loader_prwm",
-		"webgl_loader_sea3d",
-		"webgl_loader_sea3d_bvh",
-		"webgl_loader_sea3d_bvh_retarget",
-		"webgl_loader_sea3d_hierarchy",
-		"webgl_loader_sea3d_keyframe",
-		"webgl_loader_sea3d_morph",
-		"webgl_loader_sea3d_physics",
-		"webgl_loader_sea3d_skinning",
-		"webgl_loader_sea3d_sound",
 		"webgl_loader_stl",
 		"webgl_loader_svg",
 		"webgl_loader_texture_basis",
@@ -369,7 +361,6 @@ var files = {
 		"misc_exporter_gltf",
 		"misc_exporter_obj",
 		"misc_exporter_stl",
-		"misc_fps",
 		"misc_lookat",
 	],
 	"css2d": [
@@ -387,11 +378,6 @@ var files = {
 	],
 	"raytracing": [
 		"raytracing_sandbox"
-	],
-	"software": [
-		"software_geometry_earth",
-		"software_lines_splines",
-		"software_sandbox"
 	],
 	"svg": [
 		"svg_lines",

@@ -931,7 +931,8 @@ var FBXLoader = ( function () {
 
 					}
 
-					model.name = PropertyBinding.sanitizeNodeName( node.attrName );
+					model.name = node.attrName ? PropertyBinding.sanitizeNodeName( node.attrName ) : '';
+
 					model.ID = id;
 
 				}
@@ -965,7 +966,8 @@ var FBXLoader = ( function () {
 							bone.matrixWorld.copy( rawBone.transformLink );
 
 							// set name and id here - otherwise in cases where "subBone" is created it will not have a name / id
-							bone.name = PropertyBinding.sanitizeNodeName( name );
+
+							bone.name = name ? PropertyBinding.sanitizeNodeName( name ) : '';
 							bone.ID = id;
 
 							skeleton.bones[ i ] = bone;
@@ -1596,7 +1598,7 @@ var FBXLoader = ( function () {
 
 			}, null );
 
-			relationships.children.forEach( function( child ) {
+			relationships.children.forEach( function ( child ) {
 
 				if ( deformers.morphTargets[ child.ID ] !== undefined ) {
 
@@ -1638,19 +1640,19 @@ var FBXLoader = ( function () {
 
 			preTransform.applyToBufferAttribute( positionAttribute );
 
-			geo.addAttribute( 'position', positionAttribute );
+			geo.setAttribute( 'position', positionAttribute );
 
 			if ( buffers.colors.length > 0 ) {
 
-				geo.addAttribute( 'color', new Float32BufferAttribute( buffers.colors, 3 ) );
+				geo.setAttribute( 'color', new Float32BufferAttribute( buffers.colors, 3 ) );
 
 			}
 
 			if ( skeleton ) {
 
-				geo.addAttribute( 'skinIndex', new Uint16BufferAttribute( buffers.weightsIndices, 4 ) );
+				geo.setAttribute( 'skinIndex', new Uint16BufferAttribute( buffers.weightsIndices, 4 ) );
 
-				geo.addAttribute( 'skinWeight', new Float32BufferAttribute( buffers.vertexWeights, 4 ) );
+				geo.setAttribute( 'skinWeight', new Float32BufferAttribute( buffers.vertexWeights, 4 ) );
 
 				// used later to bind the skeleton to the model
 				geo.FBX_Deformer = skeleton;
@@ -1664,7 +1666,7 @@ var FBXLoader = ( function () {
 				var normalMatrix = new Matrix3().getNormalMatrix( preTransform );
 				normalMatrix.applyToBufferAttribute( normalAttribute );
 
-				geo.addAttribute( 'normal', normalAttribute );
+				geo.setAttribute( 'normal', normalAttribute );
 
 			}
 
@@ -1680,7 +1682,7 @@ var FBXLoader = ( function () {
 
 				}
 
-				geo.addAttribute( name, new Float32BufferAttribute( buffers.uvs[ i ], 2 ) );
+				geo.setAttribute( name, new Float32BufferAttribute( buffers.uvs[ i ], 2 ) );
 
 			} );
 
@@ -2108,7 +2110,7 @@ var FBXLoader = ( function () {
 			// parentGeo.morphAttributes.normal = []; // not implemented
 
 			 var self = this;
-			morphTargets.forEach( function( morphTarget ) {
+			morphTargets.forEach( function ( morphTarget ) {
 
 				morphTarget.rawTargets.forEach( function ( rawTarget ) {
 
@@ -2352,7 +2354,7 @@ var FBXLoader = ( function () {
 			} );
 
 			var geometry = new BufferGeometry();
-			geometry.addAttribute( 'position', new BufferAttribute( positions, 3 ) );
+			geometry.setAttribute( 'position', new BufferAttribute( positions, 3 ) );
 
 			return geometry;
 
@@ -2540,7 +2542,7 @@ var FBXLoader = ( function () {
 
 										var node = {
 
-											modelName: PropertyBinding.sanitizeNodeName( rawModel.attrName ),
+											modelName: rawModel.attrName ? PropertyBinding.sanitizeNodeName( rawModel.attrName ) : '',
 											ID: rawModel.id,
 											initialPosition: [ 0, 0, 0 ],
 											initialRotation: [ 0, 0, 0 ],
@@ -2595,7 +2597,7 @@ var FBXLoader = ( function () {
 
 									var node = {
 
-										modelName: PropertyBinding.sanitizeNodeName( rawModel.attrName ),
+										modelName: rawModel.attrName ? PropertyBinding.sanitizeNodeName( rawModel.attrName ) : '',
 										morphName: fbxTree.Objects.Deformer[ deformerID ].attrName,
 
 									};
