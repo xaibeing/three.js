@@ -60,7 +60,8 @@
 			sprite.scale.set( 2, 5, 1 );
 			group.add( sprite );
 
-			var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { color: '#69f', sizeAttenuation: false } ) );
+			// sizeAttenuation: false，设置sprite的尺寸不受透视相机距离的影响
+			var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { color: '#690', sizeAttenuation: false } ) );
 			sprite.material.rotation = Math.PI / 3 * 4;
 			sprite.position.set( 8, - 2, 2 );
 			sprite.center.set( 0.5, 0 );
