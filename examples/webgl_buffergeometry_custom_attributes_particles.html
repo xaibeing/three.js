@@ -70,7 +70,7 @@
 
 				uniforms = {
 
-					pointTexture: { value: new THREE.TextureLoader().load( "textures/sprites/spark1.png" ) }
+					pointTexture: { value: new THREE.TextureLoader().load( "textures/sprites/snowflake5.png" ) }
 
 				};
 
@@ -88,7 +88,7 @@
 				} );
 
 
-				var radius = 200;
+				var radius = 80;
 
 				geometry = new THREE.BufferGeometry();
 
@@ -100,6 +100,7 @@
 
 				for ( var i = 0; i < particles; i ++ ) {
 
+					// 顶点限制在一个立方体的范围
 					positions.push( ( Math.random() * 2 - 1 ) * radius );
 					positions.push( ( Math.random() * 2 - 1 ) * radius );
 					positions.push( ( Math.random() * 2 - 1 ) * radius );
@@ -114,6 +115,7 @@
 
 				geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
 				geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+				// size 是什么属性？
 				geometry.setAttribute( 'size', new THREE.Float32BufferAttribute( sizes, 1 ).setUsage( THREE.DynamicDrawUsage ) );
 
 				particleSystem = new THREE.Points( geometry, shaderMaterial );
@@ -158,13 +160,15 @@
 
 				var time = Date.now() * 0.005;
 
-				particleSystem.rotation.z = 0.01 * time;
+				particleSystem.rotation.x = 0.003 * time;
+				particleSystem.rotation.y = 0.003 * time;
+				particleSystem.rotation.z = 0.008 * time;
 
 				var sizes = geometry.attributes.size.array;
 
 				for ( var i = 0; i < particles; i ++ ) {
 
-					sizes[ i ] = 10 * ( 1 + Math.sin( 0.1 * i + time ) );
+					sizes[ i ] = 10 * ( 1 + Math.sin( 0.01 * i + time * 0.3 ) );
 
 				}
 
