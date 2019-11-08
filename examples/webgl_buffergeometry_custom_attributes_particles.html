@@ -54,7 +54,7 @@
 
 			var renderer, scene, camera, stats;
 
-			var particleSystem, uniforms, geometry;
+			var pointsParticleSystem, uniforms, geometry;
 
 			var particles = 100000;
 
@@ -115,12 +115,13 @@
 
 				geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
 				geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-				// size 是什么属性？
+				// size 是什么属性？BufferGeometry.setUsage() 和 THREE.DynamicDrawUsage 在文档中没有定义
 				geometry.setAttribute( 'size', new THREE.Float32BufferAttribute( sizes, 1 ).setUsage( THREE.DynamicDrawUsage ) );
 
-				particleSystem = new THREE.Points( geometry, shaderMaterial );
+				// Points 是包含很多point的3D对象
+				pointsParticleSystem = new THREE.Points( geometry, shaderMaterial );
 
-				scene.add( particleSystem );
+				scene.add( pointsParticleSystem );
 
 				renderer = new THREE.WebGLRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -160,10 +161,12 @@
 
 				var time = Date.now() * 0.005;
 
-				particleSystem.rotation.x = 0.003 * time;
-				particleSystem.rotation.y = 0.003 * time;
-				particleSystem.rotation.z = 0.008 * time;
+				// 旋转整个 pointsParticleSystem
+				pointsParticleSystem.rotation.x = 0.003 * time;
+				pointsParticleSystem.rotation.y = 0.003 * time;
+				pointsParticleSystem.rotation.z = 0.008 * time;
 
+				// 更新pointsParticleSystem 中每个 point 的 size（pointsParticleSystem 是由 geometry 构成的）
 				var sizes = geometry.attributes.size.array;
 
 				for ( var i = 0; i < particles; i ++ ) {
