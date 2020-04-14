@@ -21,7 +21,7 @@
 
 			import * as THREE from '../build/three.module.js';
 
-			import { OrbitControls } from './jsm/controls/OrbitControls.js';
+			// import { OrbitControls } from './jsm/controls/OrbitControls.js';
 			import { CSS2DRenderer, CSS2DObject } from './jsm/renderers/CSS2DRenderer.js';
 
 			var camera, scene, renderer, labelRenderer;
@@ -83,6 +83,38 @@
 				earthLabel.position.set( 0, EARTH_RADIUS, 0 );
 				earth.add( earthLabel );
 
+				////////////////////////////////////////////
+				// 增加一个DOM对象，以便用户输入信息。
+				// 这里使用了一个 CSS2DObject，可以关联定位到一个 mesh 对象上。
+				// 注意要取消 OrbitControls，它会拦截输入，使输入框无法获得焦点。
+				let container = document.createElement( 'div' );
+				let input = document.createElement("textarea");
+				input.maxLength = "5000";
+				input.cols = "80";
+				input.rows = "10";
+				input.value = "some text";
+				container.appendChild(input);
+
+				container.appendChild(document.createElement( 'br' ));
+
+				let button = document.createElement("button");
+				button.style.width = "70px";
+				button.style.height = "30px";
+				button.innerText = "提交";
+				container.appendChild(button);
+
+				container.style.position = 'relative';
+				container.style.top = 0;
+				container.style.left = 0;
+				container.style.width = "700px";
+				container.style.height = "300px";
+				container.style.backgroundColor = '#f00';
+				container.style.zIndex = 3;
+				var css2Container = new CSS2DObject( container );
+				css2Container.position.set( 0, MOON_RADIUS+3, 0 );
+				earth.add( css2Container );
+				////////////////////////////////////////////
+
 				var moonDiv = document.createElement( 'div' );
 				moonDiv.className = 'label';
 				moonDiv.textContent = 'Moon';
@@ -104,7 +136,7 @@
 				labelRenderer.domElement.style.top = 0;
 				document.body.appendChild( labelRenderer.domElement );
 
-				var controls = new OrbitControls( camera, labelRenderer.domElement );
+				// var controls = new OrbitControls( camera, labelRenderer.domElement );
 
 			}
 
