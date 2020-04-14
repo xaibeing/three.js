@@ -72,6 +72,10 @@
 			pointLight = new THREE.PointLight( 0xffffff, 1 );
 			camera.add( pointLight );
 
+			// RenderPass 是一个 Pass(class RenderPass extends Pass)，可能类似于一个 THREE.WebGLRenderer，
+			// 当 WebGLRenderer 在每一帧渲染的时候，通常会
+			// this.renderer.clear();
+			// this.renderer.render(scene, this.camera);
 			var renderScene = new RenderPass( scene, camera );
 
 			var bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
