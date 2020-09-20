@@ -43,12 +43,20 @@
 			var MODELS = [
 				{ name: "Soldier" },
 				{ name: "Parrot" },
+				{ name: "untitled" },
 				// { name: "RiflePunch" },
 			];
 
 			// Here we define instances of the models that we want to place in the scene, their position, scale and the animations
 			// that must be played.
 			var UNITS = [
+				{
+					modelName: "untitled",
+					meshName: "Armature",
+					position: { x: -5, y: 0, z: 0 },
+					scale: 1,
+					animationName: "Armature|mixamo.com|Layer0"
+				},
 				{
 					modelName: "Soldier", // Will use the 3D model from file models/gltf/Soldier.glb
 					meshName: "vanguard_Mesh", // Name of the main mesh to animate
@@ -135,26 +143,37 @@
 			 * launch necessary animations
 			 */
 			function instantiateUnits() {
+				console.log("instantiateUnits() ===============");
 
 				var numSuccess = 0;
 
 				for ( var i = 0; i < UNITS.length; ++ i ) {
+					console.log("unit", i + 1, "-----------");
 
 					var u = UNITS[ i ];
 					var model = getModelByName( u.modelName );
+					console.log("modelName =", u.modelName, ", model =", model);
 
 					if ( model ) {
 
 						var clonedScene = SkeletonUtils.clone( model.scene );
+						console.log("model.scene =", model.scene, ", clonedScene =", clonedScene);
 
 						if ( clonedScene ) {
 
 							// THREE.Scene is cloned properly, let's find one mesh and launch animation for it
 							var clonedMesh = clonedScene.getObjectByName( u.meshName );
+							console.log("meshName =", u.meshName, ", clonedMesh =", clonedMesh);
 
 							if ( clonedMesh ) {
 
 								var mixer = startAnimation( clonedMesh, model.animations, u.animationName );
+								mixer.addEventListener('finished', function (e) {
+									console.log("clip =", e.action.getClip().name, ", e =", e);
+									setTimeout(()=>{
+										playOnce(e);
+									}, 200);
+								});
 
 								// Save the animation mixer in the list, will need it in the animation loop
 								mixers.push( mixer );
@@ -176,7 +195,7 @@
 
 							if ( u.scale ) {
 
-								clonedScene.scale.set( u.scale, u.scale, u.scale );
+								clonedScene.scale.set( u.scale, u.scale, -u.scale );
 
 							}
 
@@ -213,12 +232,12 @@
 
 				var mixer = new THREE.AnimationMixer( skinnedMesh );
 				var clip = THREE.AnimationClip.findByName( animations, animationName );
-
 				if ( clip ) {
 
 					var action = mixer.clipAction( clip );
+					action.setDuration(1);
+					action.setLoop(THREE.LoopOnce);
 					action.play();
-
 				}
 
 				return mixer;
@@ -304,6 +323,12 @@
 
 				renderer.render( worldScene, camera );
 
+			}
+
+			function playOnce(e) {
+				console.log("e =", e);
+				e.action.stop();
+				e.action.play();
 			}
 
 			//////////////////////////////
